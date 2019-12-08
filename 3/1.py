@@ -1,5 +1,49 @@
 def run(lines):
-    pass
+    v1 = parse(lines[0].split(','))
+    v2 = parse(lines[1].split(','))
+
+    p1 = points(v1)
+    p2 = points(v2)
+
+    return min([abs(x) + abs(y) for x, y in (p1 & p2)])
+
+def points(vectors):
+    out = set()
+
+    point = (0, 0)
+    for v in vectors:
+        for i in range(v[0]):
+            #Y direction
+            if(v[1]):
+                point = (point[0], point[1] + v[2])
+            #X direction
+            else:
+                point = (point[0] + v[2], point[1])
+
+            out.add(point)
+
+    return out
+
+def parse(dirs):
+    #(distance, x/y, step)
+    #Eg. (120, 0, 1) means go 120 in the positive x direction
+    out = []
+
+    for dir in dirs:
+        if dir[0] == 'R':
+            # out.append( (int(dir[1:]),0) )
+            out.append( (int(dir[1:]),0, 1) )
+        elif dir[0] == 'D':
+            out.append( (int(dir[1:]),1, -1) )
+            # out.append( (0, -int(dir[1:])) )
+        elif dir[0] == 'L':
+            out.append( (int(dir[1:]),0, -1) )
+            # out.append( (-int(dir[1:]),0) )
+        else:
+            out.append( (int(dir[1:]),1, 1) )
+            # out.append( (0, int(dir[1:])) )
+
+    return out
 
 
 #Ill fated attempt using vectors and line segment math
